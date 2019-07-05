@@ -21,20 +21,21 @@ class UserManager(BaseUserManager):
         )
         user_obj.set_password(password)
         user_obj.active = is_active
-        user_obj.staff = is_staff
         user_obj.admin = is_admin
+        user_obj.staff = is_staff
         user_obj.save(self._db)
         return user_obj
 
-    def create_staffuser(self, username,  email, first_name, last_name, password=None,):
+    def create_staffuser(self, username, email, first_name, last_name, password):
         user = self.create_user(
-            username,
+            username,        
             email,
             first_name,
             last_name,
             password = password,
-            is_staff=True
         )
+        user.staff = True
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, username, email, first_name, last_name, password=None):
@@ -45,7 +46,7 @@ class UserManager(BaseUserManager):
             last_name,
             password = password,
             is_staff=True,
-            is_admin=True
+            is_admin=True,
         )
         return user
 
@@ -62,8 +63,8 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=255)
 
     active = models.BooleanField(default=True)
-    admin = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
+    admin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
