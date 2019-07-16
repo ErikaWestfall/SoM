@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static 'home/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'SoMHome/main.css' %}">
     {% if title %}
         <title>SoM - {{ title }}</title>
     {% else %}
@@ -22,14 +22,20 @@
         </button>
         <div class="collapse navbar-collapse navbar-pad" id="navbarNavAltMarkup">
             <div class="navbar-nav mr-auto">
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and user.profile.role == 'Student' %}
                     <a class="nav-item nav-link" href="{% url 'user-profile' %}">{{ user }}</a>
                     <a class="nav-item nav-link" href="{% url 'SoM-announcements' %}">Announcements</a>
                     <a class="nav-item nav-link" href="{% url 'SoM-events' %}">Events</a>
                     <a class="nav-item nav-link" href="{% url 'SoM-forum' %}">Forum</a>
                     <a class="nav-item nav-link" href="{% url 'site-blog' %}">Blog</a>
+                {% elif user.is_authenticated and user.profile.role == 'Teacher' %}
+                    <a class="nav-item nav-link" href="{% url 'user-profile' %}">{{ user }}</a>
+                    <a class="nav-item nav-link" href="#">My Students</a>
+                    <a class="nav-item nav-link" href="{% url 'SoM-announcements' %}">Announcements</a>
+                    <a class="nav-item nav-link" href="{% url 'SoM-events' %}">Events</a>
+                    <a class="nav-item nav-link" href="{% url 'SoM-forum' %}">Forum</a>
+                    <a class="nav-item nav-link" href="{% url 'site-blog' %}">Blog</a>
                 {% else %}
-                    <a class="nav-item nav-link" href="{% url 'site-home' %}">Home</a>
                     <a class="nav-item nav-link" href="{% url 'site-about' %}">About</a>
                     <a class="nav-item nav-link" href="{% url 'site-blog' %}">Blog</a>
                 {% endif %}
@@ -44,7 +50,7 @@
         </div>
     </nav>
 
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and user.profile.role == 'Student' %}
         <nav class="sidebar nav flex-column navbar-light bg-light">
             <a class="nav-item nav-link" href="#">Grades</a>
             <a class="nav-item nav-link" href="#">Classes</a>
