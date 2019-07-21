@@ -1,4 +1,15 @@
 {% extends "SoMHome/base.html" %}
 {% block content %}
-    <h1>Announcements</h1>
+    {% for Ann in Announcements %}
+        <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2" href="#">{{ Ann.author }}</a>
+                    <small class="text-muted">{{ Ann.date_posted|date:"l, F j, Y" }}</small>
+                </div>
+                <h2><a class="article-title" href="#">{{ Ann.title }}</a></h2>
+                <p class="article-content">{{ Ann.content }}</p>
+            </div>
+        </article>
+    {% endfor %}
 {% endblock content %}

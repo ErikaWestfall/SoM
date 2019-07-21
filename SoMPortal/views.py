@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from .models import Announcement
 
 @login_required
 def profile(request, username=None):
@@ -20,7 +21,7 @@ def Announcements(request, username=None):
     else:
         user = request.user
 
-    context = {'user': user, 'title': 'Announcements'}
+    context = {'user': user, 'title': 'Announcements', 'Announcements': Announcement.objects.all()}
 
     return render(request, 'SoMPortal/Announcements.html', context)
 
