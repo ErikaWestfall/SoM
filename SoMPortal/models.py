@@ -3,55 +3,42 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)   
-    birth_date = models.DateField(blank=True, null=True)
-    age = models.IntegerField(blank=True, null=True)
-
-    role_choices = (
-        ('Student', 'Student'),
-        ('Teacher', 'Teacher')
-    )
-
-    role = models.CharField(
-        max_length = 7,
-        choices = role_choices
-    )
-
-    def __str__(self):
-        return f'{self.user.username} Profile'
-
 class Course(models.Model):
     course_name = models.CharField(max_length=100)
+    course_length_years = models.IntegerField(default=4, validators=[MinValueValidator(1), MaxValueValidator(6)])
 
     def __str__(self):
         return f'{self.course_name}'
 
-class Student(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+class StudentProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    birth_date = models.DateField(blank=True, null=True)
+    age = models.IntegerField(blank=True, null=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.profile.user.username}'
+        return f'{self.user.username} Profile'
 
-class Teacher(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-
+class TeacherProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    birth_date = models.DateField(blank=True, null=True)
+    age = models.IntegerField(blank=True, null=True)
+    students = models.ManyToManyField(StudentProfile)
+    
     def __str__(self):
-        return f'{self.profile.user.username}'
+        return f'{self.user.username} Profile'
 
 class Class(models.Model):
     class_name = models.CharField(max_length=100)
-    class_code = models.CharField(max_length=30)
-    students = models.ManyToManyField(Student)
-    teachers = models.ManyToManyField(Teacher)
+    students = models.ManyToManyField(StudentProfile, blank=True)
+    teacher = models.ForeignKey(TeacherProfile, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.class_name}'
 
 class Test(models.Model):
     class_name = models.ForeignKey(Class, on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
     test_choices = (
         ('Unit 1', 'Unit Test 1'),
         ('Unit 2', 'Unit Test 2'),
@@ -84,7 +71,7 @@ class SemesterGrade(models.Model):
         choices = sem_choices
     )
 
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
     class_name = models.ForeignKey(Class, on_delete=models.CASCADE)
     test = models.ManyToManyField(Test)
     

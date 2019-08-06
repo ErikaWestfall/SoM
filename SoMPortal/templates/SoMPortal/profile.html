@@ -3,7 +3,7 @@
     <h2>{{ user.get_full_name }}</h2>
     <hr>
     <small>{{ user.profile.role }}</small>
-    {% if user.is_authenticated and user.profile.role == 'Student' %}
-    <p>course: {{ user.profile.student.course }}</p>
+    {% if user.is_authenticated and user.student %}
+        <p>course: {{ user.studentprofile.course.course_name }}</p>
     {% endif %}
 {% endblock content %}

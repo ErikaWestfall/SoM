@@ -1,10 +1,9 @@
 from django.contrib import admin
-from .models import Profile, Course, Student, Teacher, Class, SemesterGrade, Test, Announcement
+from .models import StudentProfile, TeacherProfile, Course, Class, SemesterGrade, Test, Announcement
 
-admin.site.register(Profile)
+admin.site.register(StudentProfile)
+admin.site.register(TeacherProfile)
 admin.site.register(Course)
-admin.site.register(Student)
-admin.site.register(Teacher)
 admin.site.register(Class)
 admin.site.register(SemesterGrade)
 admin.site.register(Test)

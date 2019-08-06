@@ -22,15 +22,15 @@
         </button>
         <div class="collapse navbar-collapse navbar-pad" id="navbarNavAltMarkup">
             <div class="navbar-nav mr-auto">
-                {% if user.is_authenticated and user.profile.role == 'Student' %}
+                {% if user.is_authenticated and user.student %}
                     <a class="nav-item nav-link" href="{% url 'user-profile' %}">{{ user }}</a>
                     <a class="nav-item nav-link" href="{% url 'SoM-announcements' %}">Announcements</a>
                     <a class="nav-item nav-link" href="{% url 'SoM-events' %}">Events</a>
                     <a class="nav-item nav-link" href="{% url 'SoM-forum' %}">Forum</a>
                     <a class="nav-item nav-link" href="{% url 'site-blog' %}">Blog</a>
-                {% elif user.is_authenticated and user.profile.role == 'Teacher' %}
+                {% elif user.is_authenticated and user.teacher %}
                     <a class="nav-item nav-link" href="{% url 'user-profile' %}">{{ user }}</a>
-                    <a class="nav-item nav-link" href="#">My Students</a>
+                    <a class="nav-item nav-link" href="{% url 'SoM-myStudents' %}">My Students</a>
                     <a class="nav-item nav-link" href="{% url 'SoM-announcements' %}">Announcements</a>
                     <a class="nav-item nav-link" href="{% url 'SoM-events' %}">Events</a>
                     <a class="nav-item nav-link" href="{% url 'SoM-forum' %}">Forum</a>
@@ -50,12 +50,11 @@
         </div>
     </nav>
 
-    {% if user.is_authenticated and user.profile.role == 'Student' %}
+    {% if user.is_authenticated and user.student %}
         <nav class="sidebar nav flex-column navbar-light bg-light">
-            <a class="nav-item nav-link" href="#">Grades</a>
-            <a class="nav-item nav-link" href="#">Classes</a>
-            <a class="nav-item nav-link" href="#">Teachers</a>
-            <a class="nav-item nav-link" href="#">Cashier</a>
+            <a class="nav-item nav-link" href="{% url 'SoM-grades' %}">Grades</a>
+            <a class="nav-item nav-link" href="{% url 'SoM-classes' %}">Classes</a>
+            <a class="nav-item nav-link" href="{% url 'SoM-cashier' %}">Cashier</a>
         </nav>
     {% endif %}
     <main role="main" class="container"> 

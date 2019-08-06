@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser)
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, first_name, last_name, password=None, is_active=True, is_staff=False, is_admin=False):
+    def create_user(self, username, email, first_name, last_name, password=None, is_active=True, is_staff=False, is_admin=False, is_student=False, is_teacher=False):
         if not username:
             raise ValueError("Users must have a username.")
         if not password:
@@ -23,6 +23,8 @@ class UserManager(BaseUserManager):
         user_obj.active = is_active
         user_obj.admin = is_admin
         user_obj.staff = is_staff
+        user_obj.student = is_student
+        user_obj.teacher = is_teacher
         user_obj.save(self._db)
         return user_obj
 
@@ -62,6 +64,8 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
 
+    student = models.BooleanField(default=False)
+    teacher = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
@@ -104,3 +108,13 @@ class User(AbstractBaseUser):
     def is_active(self):
         "Is the user active?"
         return self.active
+
+    @property
+    def is_student(self):
+        "Is the user a student?"
+        return self.student
+        
+    @property
+    def is_teacher(self):
+        "Is the user a teacher?"
+        return self.teacher

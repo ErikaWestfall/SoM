@@ -1,0 +1,13 @@
+{% extends "SoMHome/base.html" %}
+{% block content %}
+    <h2>Students:</h2>
+    {% for class in classes %}
+        <h4>Class: {{ class.class_name }}</h4>
+        <h5>Students:</h5>
+        <ul>
+        {% for student in class.students.all %}
+            <li><a href="#">{{ student.user.get_full_name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+{% endblock content %}
